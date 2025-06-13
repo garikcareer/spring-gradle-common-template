@@ -1,0 +1,1 @@
+# springboot-gradle-thymeleaf-h2-template
