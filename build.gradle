@@ -1,0 +1,33 @@
+plugins {
+    id 'java-library'
+}
+
+group = PROJECT_GROUP
+version = PROJECT_VERSION
+
+java {
+    sourceCompatibility = '24'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    // Exposed to consumers
+    api 'org.springframework:spring-jdbc:' + springJdbcVersion
+    api 'org.springframework:spring-context:' + springJdbcVersion
+
+    // Internal only
+    implementation 'com.h2database:h2:'+ h2Version
+
+    // Tests
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.springframework:spring-test:' + springJdbcVersion
+    testImplementation 'org.junit.jupiter:junit-jupiter:' + junitVersion
+}
+
+test {
+    useJUnitPlatform()
+}
