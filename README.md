@@ -1,4 +1,4 @@
-# springboot-gradle-thymeleaf-h2-template
+# spring-gradle-common-template
 ## Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)
