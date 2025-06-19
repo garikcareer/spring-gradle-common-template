@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 group = PROJECT_GROUP
@@ -30,4 +31,18 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId = PROJECT_GROUP
+            artifactId = PROJECT_NAME
+            version = PROJECT_VERSION
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
 }
