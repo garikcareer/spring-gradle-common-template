@@ -7,28 +7,16 @@ group = PROJECT_GROUP
 version = PROJECT_VERSION
 
 java {
-    sourceCompatibility = '24'
+    withSourcesJar()
+    withJavadocJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+    }
 }
 
 repositories {
-    mavenCentral()
     mavenLocal()
-}
-
-dependencies {
-    // Exposed to consumers
-    api 'org.springframework:spring-jdbc:' + springVersion
-    api 'org.springframework:spring-context:' + springVersion
-
-    // Tests
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testImplementation 'com.h2database:h2:'+ h2Version
-    testImplementation 'org.springframework:spring-test:' + springVersion
-    testImplementation 'org.junit.jupiter:junit-jupiter:' + junitVersion
-}
-
-test {
-    useJUnitPlatform()
+    mavenCentral()
 }
 
 publishing {
@@ -43,4 +31,44 @@ publishing {
     repositories {
         mavenLocal()
     }
+}
+
+dependencies {
+    // Exposed to consumers
+    api 'org.springframework:spring-jdbc:' + springVersion
+    api 'org.springframework:spring-context:' + springVersion
+
+    // Tests
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'com.h2database:h2:'+ h2Version
+    testImplementation 'org.springframework:spring-test:' + springVersion
+    testImplementation 'org.junit.jupiter:junit-jupiter:' + junitVersion
+}
+
+sourcesJar {
+    from sourceSets.main.allJava
+    archiveBaseName = PROJECT_NAME
+    archiveVersion = PROJECT_VERSION
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+javadoc {
+    enabled = true
+    source = sourceSets.main.allJava
+    classpath += configurations.compileClasspath
+    destinationDir = reporting.file("/docs/javadoc")
+    options {
+        encoding = 'UTF-8'
+        title = PROJECT_NAME
+        windowTitle = PROJECT_NAME + ":" + PROJECT_VERSION + "-Javadoc"
+    }
+    failOnError = false
 }

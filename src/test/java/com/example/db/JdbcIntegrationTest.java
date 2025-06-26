@@ -16,14 +16,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = AppConfig.class)
 public class JdbcIntegrationTest {
-
     @Autowired
-    private JdbcTemplate jdbc;
+    private JdbcTemplate jdbcTemplate;
+
+    @Test
+    void jdbcTemplateIsAutowired() {
+        assertNotNull(jdbcTemplate);
+    }
 
     @BeforeEach
     void setup() {
-        jdbc.execute("DROP TABLE IF EXISTS users");
-        jdbc.execute("""
+        jdbcTemplate.execute("DROP TABLE IF EXISTS users");
+        jdbcTemplate.execute("""
             CREATE TABLE users (
                 id INT PRIMARY KEY,
                 name VARCHAR(50)
@@ -33,18 +37,18 @@ public class JdbcIntegrationTest {
 
     @Test
     void insertAndQueryUser() {
-        jdbc.update("INSERT INTO users (id, name) VALUES (?, ?)", 1, "Alice");
-        String name = jdbc.query("SELECT name FROM users WHERE id = 1",
+        jdbcTemplate.update("INSERT INTO users (id, name) VALUES (?, ?)", 1, "Alice");
+        String name = jdbcTemplate.query("SELECT name FROM users WHERE id = 1",
                 (resultSet, rowNum) -> resultSet.getString("name")).getFirst();
         assertEquals("Alice", name);
     }
 
     @Test
     void insertMultipleAndListAll() {
-        jdbc.update("INSERT INTO users (id, name) VALUES (?, ?)", 1, "Alice");
-        jdbc.update("INSERT INTO users (id, name) VALUES (?, ?)", 2, "Bob");
+        jdbcTemplate.update("INSERT INTO users (id, name) VALUES (?, ?)", 1, "Alice");
+        jdbcTemplate.update("INSERT INTO users (id, name) VALUES (?, ?)", 2, "Bob");
 
-        List<String> names = jdbc.query("SELECT name FROM users",
+        List<String> names = jdbcTemplate.query("SELECT name FROM users",
                 (rs, rowNum) -> rs.getString("name"));
 
         assertEquals(2, names.size());
@@ -54,18 +58,18 @@ public class JdbcIntegrationTest {
 
     @Test
     void deleteUserAndVerify() {
-        jdbc.update("INSERT INTO users (id, name) VALUES (?, ?)", 1, "Alice");
-        int deleted = jdbc.update("DELETE FROM users WHERE id = ?", 1);
+        jdbcTemplate.update("INSERT INTO users (id, name) VALUES (?, ?)", 1, "Alice");
+        int deleted = jdbcTemplate.update("DELETE FROM users WHERE id = ?", 1);
 
         assertEquals(1, deleted);
 
-        Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM users", Integer.class);
+        Integer count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Integer.class);
         assertEquals(0, count);
     }
 
     @Test
     void tableShouldBeEmptyInitially() {
-        Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM users", Integer.class);
+        Integer count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Integer.class);
         assertEquals(0, count);
     }
 }
