@@ -37,9 +37,11 @@ dependencies {
     // Exposed to consumers
     api 'org.springframework:spring-jdbc:' + springVersion
     api 'org.springframework:spring-context:' + springVersion
+    api 'org.slf4j:slf4j-api:' + slf4jVersion
 
     // Tests
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'org.slf4j:slf4j-simple:' + slf4jVersion
     testImplementation 'com.h2database:h2:'+ h2Version
     testImplementation 'org.springframework:spring-test:' + springVersion
     testImplementation 'org.junit.jupiter:junit-jupiter:' + junitVersion
@@ -58,6 +60,8 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+
+    systemProperty 'org.slf4j.simpleLogger.defaultLogLevel', 'info'
 }
 
 javadoc {
