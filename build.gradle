@@ -68,7 +68,6 @@ javadoc {
     enabled = true
     source = sourceSets.main.allJava
     classpath += configurations.compileClasspath
-    destinationDir = reporting.file("/docs/javadoc")
     options {
         encoding = 'UTF-8'
         title = PROJECT_NAME
