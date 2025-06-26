@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = PROJECT_GROUP
@@ -12,11 +13,6 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(24)
     }
-}
-
-repositories {
-    mavenLocal()
-    mavenCentral()
 }
 
 publishing {
@@ -42,7 +38,7 @@ dependencies {
     // Tests
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testRuntimeOnly 'org.slf4j:slf4j-api'
-    testImplementation 'com.h2database:h2:'+ h2Version
+    testImplementation 'com.h2database:h2:' + h2Version
     testImplementation 'org.springframework:spring-test:' + springVersion
     testImplementation 'org.junit.jupiter:junit-jupiter:' + junitVersion
 }
@@ -74,4 +70,24 @@ javadoc {
         windowTitle = PROJECT_NAME + ":" + PROJECT_VERSION + "-Javadoc"
     }
     failOnError = false
+}
+
+spotless {
+    // ./gradlew spotlessApply	- Format code in place
+    // ./gradlew spotlessCheck  - Check that code is formatted (CI check)
+    java {
+        target 'src/**/*.java'
+        googleJavaFormat()
+        importOrder()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+        formatAnnotations()
+    }
+    groovyGradle {
+        target '**/*.gradle'
+        trimTrailingWhitespace()
+        endWithNewline()
+        indentWithSpaces(4)
+    }
 }
