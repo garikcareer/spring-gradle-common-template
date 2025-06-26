@@ -41,7 +41,7 @@ dependencies {
 
     // Tests
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testRuntimeOnly 'org.slf4j:slf4j-simple:' + slf4jVersion
+    testRuntimeOnly 'org.slf4j:slf4j-api'
     testImplementation 'com.h2database:h2:'+ h2Version
     testImplementation 'org.springframework:spring-test:' + springVersion
     testImplementation 'org.junit.jupiter:junit-jupiter:' + junitVersion
