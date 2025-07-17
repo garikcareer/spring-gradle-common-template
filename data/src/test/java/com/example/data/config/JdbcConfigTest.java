@@ -1,4 +1,4 @@
-package com.example.config;
+package com.example.data.config;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

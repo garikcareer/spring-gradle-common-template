@@ -1,0 +1,96 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'com.diffplug.spotless' version 'latest.release'
+}
+
+group = PROJECT_GROUP
+version = PROJECT_VERSION
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+    }
+    compileJava {
+        dependsOn spotlessApply
+    }
+}
+
+dependencies {
+    // Exposed to consumers
+    api 'org.springframework:spring-jdbc:' + springVersion
+    api 'org.springframework:spring-context:' + springVersion
+    api 'org.slf4j:slf4j-api:' + slf4jVersion
+
+    implementation 'jakarta.persistence:jakarta.persistence-api:3.2.0'
+
+    // Tests
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'org.slf4j:slf4j-api'
+    testImplementation 'com.h2database:h2:' + h2Version
+    testImplementation 'org.springframework:spring-test:' + springVersion
+    testImplementation 'org.junit.jupiter:junit-jupiter:' + junitVersion
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId = PROJECT_GROUP
+            artifactId = PROJECT_NAME
+            version = PROJECT_VERSION
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
+
+sourcesJar {
+    from sourceSets.main.allJava
+    archiveBaseName = PROJECT_NAME
+    archiveVersion = PROJECT_VERSION
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+javadoc {
+    enabled = true
+    source = sourceSets.main.allJava
+    classpath += configurations.compileClasspath
+    options {
+        encoding = 'UTF-8'
+        title = PROJECT_NAME
+        windowTitle = PROJECT_NAME + ":" + PROJECT_VERSION + "-Javadoc"
+    }
+    failOnError = false
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+        googleJavaFormat()
+        importOrder()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+        formatAnnotations()
+    }
+    groovyGradle {
+        target '**/*.gradle'
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}

@@ -1,19 +1,23 @@
 plugins {
-    id 'java-library'
+    id 'application'
+    id 'war'
     id 'maven-publish'
     id 'com.diffplug.spotless' version 'latest.release'
 }
 
 dependencies {
-    // Exposed to consumers
-    api 'org.springframework:spring-jdbc:' + springVersion
-    api 'org.springframework:spring-context:' + springVersion
-    api 'org.slf4j:slf4j-api:' + slf4jVersion
+    // Uses
+    implementation 'org.springframework:spring-webmvc:' + springVersion
+    implementation 'org.springframework.data:spring-data-commons:' + springCommonsVersion
+    implementation 'org.thymeleaf:thymeleaf:' + thymeleafVersion
+    implementation 'org.thymeleaf:thymeleaf-spring6:' + thymeleafVersion
+
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.1.0'
 
     // Tests
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testRuntimeOnly 'org.slf4j:slf4j-api'
-    testImplementation 'com.h2database:h2:' + h2Version
+    testImplementation 'com.h2database:h2:'+ h2Version
     testImplementation 'org.springframework:spring-test:' + springVersion
     testImplementation 'org.junit.jupiter:junit-jupiter:' + junitVersion
 }
@@ -22,7 +26,6 @@ group = PROJECT_GROUP
 version = PROJECT_VERSION
 
 java {
-    withSourcesJar()
     withJavadocJar()
     toolchain {
         languageVersion = JavaLanguageVersion.of(24)
@@ -30,6 +33,10 @@ java {
     compileJava {
         dependsOn spotlessApply
     }
+}
+
+application {
+    mainClass = 'com.example.App'
 }
 
 publishing {
@@ -46,11 +53,8 @@ publishing {
     }
 }
 
-sourcesJar {
-    from sourceSets.main.allJava
-    archiveBaseName = PROJECT_NAME
-    archiveVersion = PROJECT_VERSION
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+war {
+    archiveFileName = 'site-template.war'
 }
 
 test {
@@ -61,7 +65,7 @@ test {
 }
 
 javadoc {
-    enabled = true
+    enabled = false
     source = sourceSets.main.allJava
     classpath += configurations.compileClasspath
     options {
@@ -84,6 +88,12 @@ spotless {
     }
     groovyGradle {
         target '**/*.gradle'
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    css {
+        target 'src/**/*.css'
+        prettier()
         trimTrailingWhitespace()
         endWithNewline()
     }

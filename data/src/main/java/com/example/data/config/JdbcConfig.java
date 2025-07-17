@@ -1,4 +1,4 @@
-package com.example.config;
+package com.example.data.config;
 
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
