@@ -1,17 +1,15 @@
 plugins {
     id 'application'
     id 'war'
-    id 'maven-publish'
-    id 'com.diffplug.spotless' version 'latest.release'
 }
 
 dependencies {
     // Uses
+    implementation project(':service')
+    implementation project(':data')
     implementation 'org.springframework:spring-webmvc:' + springVersion
-    implementation 'org.springframework.data:spring-data-commons:' + springCommonsVersion
     implementation 'org.thymeleaf:thymeleaf:' + thymeleafVersion
     implementation 'org.thymeleaf:thymeleaf-spring6:' + thymeleafVersion
-
     implementation 'jakarta.servlet:jakarta.servlet-api:6.1.0'
 
     // Tests
@@ -22,79 +20,10 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:' + junitVersion
 }
 
-group = PROJECT_GROUP
-version = PROJECT_VERSION
-
-java {
-    withJavadocJar()
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
-    }
-    compileJava {
-        dependsOn spotlessApply
-    }
-}
-
 application {
     mainClass = 'com.example.App'
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            groupId = PROJECT_GROUP
-            artifactId = PROJECT_NAME
-            version = PROJECT_VERSION
-        }
-    }
-    repositories {
-        mavenLocal()
-    }
-}
-
 war {
     archiveFileName = 'site-template.war'
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
-
-javadoc {
-    enabled = false
-    source = sourceSets.main.allJava
-    classpath += configurations.compileClasspath
-    options {
-        encoding = 'UTF-8'
-        title = PROJECT_NAME
-        windowTitle = PROJECT_NAME + ":" + PROJECT_VERSION + "-Javadoc"
-    }
-    failOnError = false
-}
-
-spotless {
-    java {
-        target 'src/**/*.java'
-        googleJavaFormat()
-        importOrder()
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
-        formatAnnotations()
-    }
-    groovyGradle {
-        target '**/*.gradle'
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
-    css {
-        target 'src/**/*.css'
-        prettier()
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
 }
