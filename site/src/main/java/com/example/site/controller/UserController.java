@@ -24,7 +24,7 @@ public class UserController {
   public ModelAndView getAllCompanies(Model model) {
     model.addAttribute("content", "users");
     model.addAttribute("pageTitle", "Users");
-    model.addAttribute("users:", userService.getUsers());
+    model.addAttribute("users:", userService.getAllUsers());
     return new ModelAndView("layout");
   }
 }

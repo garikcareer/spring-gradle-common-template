@@ -1,25 +1,51 @@
 package com.example.service;
 
 import com.example.data.entity.User;
+import com.example.data.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface UserService {
-  void addUser(User User);
+@Service
+public class UserService {
+  private final UserRepository userRepository;
 
-  User getUserById(Long userId);
+  @Autowired
+  public UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
-  List<User> getUsers();
+  // Create
+  public void createUser(User user) {
+    userRepository.save(user);
+  }
 
-  /**
-   * @param userId
-   * @param user
-   */
-  void updateUser(Long userId, User user);
+  // Read
+  public User getUserById(Long userId) {
+    return userRepository
+        .findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("Company not found"));
+  }
 
-  /**
-   * Deletes a company from the system based on the given company ID.
-   *
-   * @param userId the unique identifier of the company to be deleted
-   */
-  void deleteUserById(Long userId);
+  public List<User> getAllUsers() {
+    return (List<User>) userRepository.findAll();
+  }
+
+  // Update
+  public void updateUser(Long userId, User user) {
+    User existingUser =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("Company not found with id: " + userId));
+    existingUser.setFirstName(user.getFirstName());
+    existingUser.setLastName(user.getLastName());
+    existingUser.setLocation(user.getLocation());
+    userRepository.save(existingUser);
+  }
+
+  // Delete
+  public void deleteUserById(Long companyId) {
+    userRepository.deleteById(companyId);
+  }
 }

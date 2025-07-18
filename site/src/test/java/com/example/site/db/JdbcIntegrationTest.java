@@ -2,7 +2,7 @@ package com.example.site.db;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.config.JdbcConfig;
+import com.example.data.config.JdbcConfig;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

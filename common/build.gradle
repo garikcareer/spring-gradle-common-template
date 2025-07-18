@@ -3,6 +3,5 @@ plugins {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    api 'org.slf4j:slf4j-api:' + slf4jVersion
 }
