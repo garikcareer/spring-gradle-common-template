@@ -4,17 +4,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The App class serves as the entry point of the application. It initializes the application and
+ * The Application class serves as the entry point of the application. It initializes the application and
  * logs its start-up process.
  */
-public class App {
-  Logger logger = LoggerFactory.getLogger(App.class);
+public class Application {
+  Logger logger = LoggerFactory.getLogger(Application.class);
 
   /**
    * Constructs a new instance of the App class. This constructor initializes the application and
    * prepares it for execution.
    */
-  public App() {}
+  public Application() {}
 
   /**
    * The main method serves as the entry point of the application. It initializes the application
@@ -23,8 +23,8 @@ public class App {
    * @param args an array of command-line arguments passed to the application
    */
   public static void main(String[] args) {
-    Logger logger = LoggerFactory.getLogger(App.class);
-    new App();
+    Logger logger = LoggerFactory.getLogger(Application.class);
+    new Application();
     logger.info("App started");
   }
 }

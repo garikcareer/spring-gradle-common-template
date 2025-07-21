@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class AppConfigTest {
-  Logger logger = LoggerFactory.getLogger(AppConfigTest.class);
+public class ApplicationConfigTest {
+  Logger logger = LoggerFactory.getLogger(ApplicationConfigTest.class);
 
   @Test
   void contextLoads() {
