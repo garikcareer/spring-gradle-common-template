@@ -1,15 +1,16 @@
 package com.example.site;
 
+import com.example.site.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * The Application class serves as the entry point of the application. It initializes the application and
  * logs its start-up process.
  */
 public class Application {
-  Logger logger = LoggerFactory.getLogger(Application.class);
-
   /**
    * Constructs a new instance of the App class. This constructor initializes the application and
    * prepares it for execution.
@@ -24,7 +25,10 @@ public class Application {
    */
   public static void main(String[] args) {
     Logger logger = LoggerFactory.getLogger(Application.class);
-    new Application();
-    logger.info("App started");
+
+    ConfigurableApplicationContext configurableApplicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+    configurableApplicationContext.registerShutdownHook();
+    configurableApplicationContext.start();
+    logger.info("Application started");
   }
 }
