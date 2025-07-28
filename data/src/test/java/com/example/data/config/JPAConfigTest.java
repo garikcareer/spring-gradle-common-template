@@ -2,36 +2,41 @@ package com.example.data.config;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @ExtendWith(SpringExtension.class)
+@WebAppConfiguration
 @TestPropertySource("classpath:db-local.properties")
-@ContextConfiguration(classes = JdbcConfig.class)
-public class JdbcConfigTest {
-  Logger logger = LoggerFactory.getLogger(JdbcConfigTest.class);
+@ContextConfiguration(classes = JPAConfig.class)
+public class JPAConfigTest {
+  Logger logger = LoggerFactory.getLogger(JPAConfigTest.class);
 
-  @Autowired private JdbcTemplate jdbcTemplate;
+  @PersistenceContext
+  private EntityManager entityManager;
 
-  @Autowired private DataSource dataSource;
+  @Autowired
+  private DataSource dataSource;
 
   @Test
-  void jdbcTemplateIsAutowired() {
-    assertNotNull(jdbcTemplate);
-    logger.info("jdbcTemplate: {}", jdbcTemplate);
+  void entityManagerIsAutowired() {
+    assertNotNull(entityManager);
+    logger.info("entityManager: {}", entityManager);
   }
 
   @Test
   void dataSourceIsAutowired() {
-    assertNotNull(jdbcTemplate);
+    assertNotNull(dataSource);
     logger.info("dataSource: {}", dataSource);
   }
 

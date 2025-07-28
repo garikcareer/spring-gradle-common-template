@@ -1,6 +1,6 @@
 package com.example.site;
 
-import com.example.site.config.AppConfig;
+import com.example.site.config.ApplicationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -26,7 +26,7 @@ public class Application {
   public static void main(String[] args) {
     Logger logger = LoggerFactory.getLogger(Application.class);
 
-    ConfigurableApplicationContext configurableApplicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+    ConfigurableApplicationContext configurableApplicationContext = new AnnotationConfigApplicationContext(ApplicationConfig.class);
     configurableApplicationContext.registerShutdownHook();
     configurableApplicationContext.start();
     logger.info("Application started");

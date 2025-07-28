@@ -1,33 +1,39 @@
 package com.example.data.config;
 
 import javax.sql.DataSource;
+
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
- * JDBC Configuration class that provides database connectivity beans and related configurations.
- * This class is responsible for setting up the database connection and related JDBC components for
+ * JPA Configuration class that provides database connectivity beans and related configurations.
+ * This class is responsible for setting up the database connection and related JPA components for
  * the application.
  *
  * @author Garik Arutyunyan
  * @version 1.0
  * @since 1.0
  */
-@PropertySource("classpath:db-${env:local}.properties")
 @Configuration
-public class JdbcConfig {
-  /** Default constructor for JdbcConfig. Initializes a new instance of the JDBC configuration. */
-  JdbcConfig() {}
+@PropertySource("classpath:db-${env:local}.properties")
+@EnableJpaRepositories(basePackages = "com.example.data.repository")
+public class JPAConfig {
+  /** Default constructor for JdbcConfig. Initializes a new instance of the JPA configuration. */
+  JPAConfig() {}
 
   /**
    * The name of the database driver class to be used for establishing a database connection.
    * Populated from the external property "db.driver" defined in the application properties file.
-   * This property is mandatory for setting up the JDBC DataSource.
+   * This property is mandatory for setting up the JPA DataSource.
    */
   @Value("${db.driver}")
   private String driver;
@@ -74,28 +80,30 @@ public class JdbcConfig {
   }
 
   /**
-   * Creates and provides a JdbcTemplate bean configured with the provided DataSource. JdbcTemplate
-   * is used to simplify JDBC interactions by abstracting common boilerplate code such as connection
-   * management and SQL operations.
+   * Creates and configures the EntityManagerFactory for JPA.
    *
-   * @param ds the DataSource to be used for database connectivity
-   * @return a configured instance of JdbcTemplate
+   * @param dataSource the DataSource to be used
+   * @return configured LocalContainerEntityManagerFactoryBean
    */
   @Bean
-  public JdbcTemplate jdbcTemplate(DataSource ds) {
-    return new JdbcTemplate(ds);
+  public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+    LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+    em.setDataSource(dataSource);
+    em.setPackagesToScan("com.example.data.entity");
+    em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+    return em;
   }
 
   /**
-   * Configures and provides a DataSourceTransactionManager bean to enable declarative transaction
+   * Configures and provides a JpaTransactionManager bean to enable declarative transaction
    * management in the application. The transaction manager is responsible for coordinating
-   * transactions with the underlying database through the provided DataSource.
+   * transactions with the underlying database through JPA.
    *
-   * @param ds the DataSource to be managed for transactional support
-   * @return a configured instance of DataSourceTransactionManager
+   * @param emf the EntityManagerFactory to be managed for transactional support
+   * @return a configured instance of JpaTransactionManager
    */
   @Bean
-  public DataSourceTransactionManager transactionManager(DataSource ds) {
-    return new DataSourceTransactionManager(ds);
+  public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+    return new JpaTransactionManager(emf);
   }
 }
