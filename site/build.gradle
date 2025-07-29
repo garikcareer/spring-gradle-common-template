@@ -10,7 +10,11 @@ dependencies {
     implementation 'org.springframework:spring-webmvc:' + springVersion
     implementation 'org.thymeleaf:thymeleaf:' + thymeleafVersion
     implementation 'org.thymeleaf:thymeleaf-spring6:' + thymeleafVersion
-    implementation 'jakarta.servlet:jakarta.servlet-api:6.1.0'
+
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:11.0.8'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:11.0.8'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-websocket:11.0.8'
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testRuntimeOnly 'org.slf4j:slf4j-api'

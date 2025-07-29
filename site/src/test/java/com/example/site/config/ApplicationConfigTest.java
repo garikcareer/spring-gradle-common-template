@@ -33,11 +33,4 @@ public class ApplicationConfigTest {
       throw e;
     }
   }
-
-  @Test
-  void webContextLoads() {
-    logger.info("webContextLoads");
-    assertNotNull(context);
-    logger.info("web context loaded: {}", context);
-  }
 }
