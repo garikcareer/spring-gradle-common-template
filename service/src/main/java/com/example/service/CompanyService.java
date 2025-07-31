@@ -10,12 +10,13 @@ public interface CompanyService {
 
     List<Company> getCompanies();
 
-    /**
-     *
-     * @param companyId
-     * @param company
-     */
-    void updateCompany(Long companyId, Company company);
+  /**
+   * Updates the company information based on the provided company ID and new company data.
+   *
+   * @param companyId the unique identifier of the company to be updated
+   * @param company the new company information containing updated name and location
+   */
+  void updateCompany(Long companyId, Company company);
 
     /**
      * Deletes a company from the system based on the given company ID.

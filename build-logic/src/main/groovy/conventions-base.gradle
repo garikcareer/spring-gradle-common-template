@@ -1,5 +1,5 @@
 plugins {
-    id 'com.diffplug.spotless' version 'latest.release'
+    id 'com.diffplug.spotless'
 }
 
 group = PROJECT_GROUP
